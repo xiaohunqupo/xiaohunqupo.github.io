@@ -1,5 +1,5 @@
 ---
-titile: 学习 The-Forge 笔记
+title: 学习 The-Forge 笔记
 tags: The-Forge
 ---
 
@@ -275,14 +275,14 @@ class PipelineDesc{
 }
 
 class VertexLayout{
-   
+
 }
 
 class RasterizerStateDesc{
 }
 
 class DepthStateDesc{
-    
+
 }
 
 class GraphicsPipelineDesc{
@@ -481,8 +481,8 @@ end
 # 基本定义
 
 1. AABB (Axis-Aligned Bounding Box)，轴对称齐包围盒。
-   
-   ![](https://img-blog.csdnimg.cn/20210816114730286.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L01hc3Rlcl9DdWk=,size_16,color_FFFFFF,t_70)
+
+   ![Screenshot 2022-03-23 170738.png](D:\GitHub\xiaohunqupo.github.io\_posts\2022-03-21-the-forge-learn\Screenshot%202022-03-23%20170738.png)
 
 2. Cull，剔除
 
@@ -503,7 +503,3 @@ end
 # 基本类
 
 ## FenceStatus
-
-
-
-
