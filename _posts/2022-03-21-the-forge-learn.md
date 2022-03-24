@@ -26,73 +26,55 @@ tags: The-Forge
        }
    ```
    
-   其中`WindowsMain`执行流程：
-
-```plantuml
-@startuml
-start
-:initMemAlloc();
-note left:初始化内存分配器
-:FileSystemInitDesc;
-note left:定义文件系统对象
-:initFileSystem();
-note left:初始化文件系统
-:fsSetPathForResourceDir();
-note left:设置资源搜索目录
-:initLog();
-note left:初始化日志
-:initWindowClass();
-note left:初始化窗口类
-:更新APP的Setting;
-:getMonitor();
-note left:获取监视器设置
-:创建并设置窗口定义对象WindowDesc;
-:openWindow();
-note left:创建窗口
-:initBaseSubsystems();
-note left:初始化子系统
-:initTimer();
-note left:初始化计时器
-:pApp-><color:red>Init();
-note left:应用程序初始化
-:setupAPISwitchingUI
-note left:安装API切换UI
-:pApp-><color:red>Load();
-note left:加载App
-while(quit) is (not)
- if (gResetScenario == RESET_SCENARIO_NONE) then (yes)
-  :handleMessages();
-  note left:获取消息
-  :updateBaseSubsystems();
-  noteleft:更新子系统
-  :pApp-><color:red>Update();
-  :pApp-><color:red>Draw();
- else (no)
-  :pApp-><color:red>Unload();
-  :pApp-><color:red>Exit();
-  :exitBaseSubsystems;
-  stop
- endif
-endwhile (true)
-:pApp->mSetting.mQuit = true;
-:pApp->Unload();
-note left:释放管道、交换链、渲染对象
-:pApp->Exit();
-note left:卸载资源、卸载文件系统、输入系统、交互系统
-:exitWindowClass;
-note left:退出窗口类
-:exitLog();
-note left:退出日志系统
-:exitBaseSubsystem();
-note left:退出子系统
-:exitFileSystem();
-note left:退出文件系统
-:exitMemAlloc();
-note left:退出内存分配器
-
-end
-@enduml
-```
+   其中`WindowsMain`执行流程精简代码：
+   
+   ```cpp
+   void WindowsMain()
+   {
+       initMemAlloc(); //初始化内存分配器
+       FileSystemInitDesc fs; //定义文件系统对象
+       initFileSystem();//初始化文件系统
+       fsSetPathForResourceDir(); //设置资源搜索目录
+       initLog(); //初始化日志
+       initWindowClass();//初始化窗口类
+   
+       // 更新APP的Setting;
+       getMonitor(); //获取监视器设置
+   
+       //创建并设置窗口定义对象WindowDesc;
+       openWindow(); //创建窗口
+       initBaseSubsystems(); //初始化子系统
+       initTimer(); //初始化计时器
+   
+       pApp->Init(); //应用程序初始化
+       setupAPISwitchingUI(); //安装API切换UI
+       :pApp->Load(); //加载App
+       while(!quit)
+       {
+           if (gResetScenario == RESET_SCENARIO_NONE)
+           {
+               handleMessages(); // 获取消息
+               updateBaseSubsystems(); //更新子系统
+               pApp->Update();
+               pApp->Draw();
+           }
+           else
+           {
+               pApp->Unload();
+               pApp->Exit();
+               exitBaseSubsystems();
+           }
+       }
+       pApp->mSetting.mQuit = true;
+       pApp->Unload(); //释放管道、交换链、渲染对象
+       pApp->Exit(); //卸载资源、卸载文件系统、输入系统、交互系统
+       exitWindowClass(); //退出窗口类
+       exitLog(); //退出日志系统
+       exitBaseSubsystem(); //退出子系统
+       exitFileSystem(); //退出文件系统
+       exitMemAlloc(); //退出内存分配器
+   }
+   ```
 
 # IApp的接口
 
@@ -100,105 +82,73 @@ end
 
 该接口用于初始化程序，一般流程如下
 
-```plantuml
-@startuml
-start
-:fsSetPathForResourcedir();
-note left:设置资源目录
-:构造RenderDesc;
-:initRender();
-note left:初始化渲染器
-:构造QueueDesc;
-while (ImageCount)
-:addCmdPool;
- note right:添加命令池
- :addCmd;
- note right:添加命令
- :addFence;
- note right:添加栅格器
- :addSemaphore;
- note right:添加(完成)信号
-endWhile
-:addSemaphore;
-note right:添加(完成)信号
-:initScreenshotInterface;
-note left:初始化屏幕快照接口
-:initResourceLoaderInterface;
-note right:初始化资源读取接口
-:addResource(TextrueLoadDesc);
-note right:添加资源
-:addShader(ShaderLoadDesc);
-note right:添加着色器
-:addSampler(SamplerDesc);
-note right:添加采样器
-:addRootSignature(RootSignatureDesc);
-note right:添加根签名
-:addDescriptorSet(DescriptorSetDesc);
-note right:添加解释器集合
-:addResource(BufferLoadDesc);
-note right:添加资源
-:fntDefineFonts(FontDesc);
-note right:定义字体
-:initFontSystem(FontSystemDesc);
-note right:初始化字体系统
-:initUserInterface(UserInterfaceDesc);
-note right:初始化Forge用户交互
-:initProfiler(ProfilerDesc);
-note right:初始化分析器和UI
-:addGpuProfiler;
-note right:添加GPU分析器
-:uiCreateComponent(UIComponentDesc);
-note right:创建UI组件
-:luaRegisterWidget(UIWidget);
-note right:注册ui组件，依赖lua
-:waitForAllResourceLoads();
-note right:等待所有资源读取
-:cameraMotionParameters;
-note right:镜头运动参数
-:initFpsCameraController();
-note right:初始化镜头控制器
-:pCameraController->setMotionParameters();
-note right:设置运动参数
-:initInputSystem(InputSystemDesc);
-note right:初始化输入系统
-:addInputAction(InputActionDesc);
-note right:注册输入动作
-:updateDescriptorSet();
-note right:更新解释器集合
-
-end
-@enduml
+```cpp
+void Init()
+{
+    fsSetPathForResourcedir(); //设置资源目录
+    构造RenderDesc();
+    initRender(); //初始化渲染器
+    构造QueueDesc();
+    while (ImageCount)
+    {
+        addCmdPool; //添加命令池
+        addCmd; //添加命令
+        addFence; //添加栅格器
+        addSemaphore; //添加(完成)信号
+    }
+    addSemaphore; //添加(完成)信号
+    initScreenshotInterface; //初始化屏幕快照接口
+    initResourceLoaderInterface; //初始化资源读取接口
+    addResource(TextrueLoadDesc); //添加资源
+    addShader(ShaderLoadDesc); //添加着色器
+    addSampler(SamplerDesc); //添加采样器
+    addRootSignature(RootSignatureDesc); //添加根签名
+    addDescriptorSet(DescriptorSetDesc); //添加解释器集合
+    addResource(BufferLoadDesc); //添加资源
+    fntDefineFonts(FontDesc); //定义字体
+    initFontSystem(FontSystemDesc); //初始化字体系统
+    initUserInterface(UserInterfaceDesc); //初始化Forge用户交互
+    initProfiler(ProfilerDesc); //初始化分析器和UI
+    addGpuProfiler; //添加GPU分析器
+    uiCreateComponent(UIComponentDesc); //创建UI组件
+    luaRegisterWidget(UIWidget); //注册ui组件，依赖lua
+    waitForAllResourceLoads(); //等待所有资源读取
+    cameraMotionParameters; //镜头运动参数
+    initFpsCameraController(); //初始化镜头控制器
+    pCameraController->setMotionParameters(); //设置运动参数
+    initInputSystem(InputSystemDesc); //初始化输入系统
+    addInputAction(InputActionDesc); //注册输入动作
+    updateDescriptorSet(); //更新解释器集合
+}
 ```
 
 ## Load
 
 该接口用于添加管道、交换链、深度缓冲区等
 
-```plantuml
-@startuml
-start
-:addSwapChain(SwapChainDesc);
-note right:添加交换链
-:addRenderTarget(RenderTargetDesc);
-note right:添加深度缓冲区(貌似不加也可以)
-:addFontSystemPipelines(RenderTarget);
-note right:添加字体系统管道
-:addUserInterfacePipelines(PipelineDesc);
-note right:添加用户交互管道
-:addPipeline(PipelineDesc);
-note right:添加绘制管道
-end
-@enduml
+```cpp
+void Load()
+{
+    addSwapChain(SwapChainDesc); //添加交换链
+    addRenderTarget(RenderTargetDesc); //添加深度缓冲区(貌似不加也可以)
+    addFontSystemPipelines(RenderTarget); //添加字体系统管道
+    addUserInterfacePipelines(PipelineDesc); //添加用户交互管道
+    addPipeline(PipelineDesc); //添加绘制管道
+}
 ```
 
 用户交互管道的组成及基本设置如下:
 
-```plantuml
-@startuml
+```mermaid
+classDiagram
 class PipelineDesc{
 + pCache : PipelineCache*
 + mType : PipelineType = PIPELINE_TYPE_GRAPHICS
 + mGraphicsDesc : GraphicsPipelineDesc
+}
+
+class RasterizerStateDesc{
+    
 }
 
 class RenderTarget{
@@ -236,7 +186,7 @@ class GraphicsPipelineDesc{
 + pVertexLayout : VertexLayout*
 }
 
-entity UserInterface{
+class UserInterface{
 + pPipelineCache : PipelineCache
 + pRootSignatureTextured : RootSignature*
 + pShaderTextured : Shader*
@@ -245,44 +195,35 @@ entity UserInterface{
 + mHeight : float
 }
 
-PipelineDesc::pCache o-- UserInterface::pPipelineCache
-PipelineDesc::mGraphicsDesc o-- GraphicsPipelineDesc
-GraphicsPipelineDesc::mSampleCount o-- RenderTarget::mSampleCount
-GraphicsPipelineDesc::mSampleQuality o-- RenderTarget::mSampleQuality
-GraphicsPipelineDesc::pColorFormats o-- RenderTarget::mFormat
-GraphicsPipelineDesc::pBlendState o-- BlendStateDesc
-GraphicsPipelineDesc::pDepthState o-- DepthStateDesc
-GraphicsPipelineDesc::pRasterizerState o-- RasterizerStateDesc
-GraphicsPipelineDesc::pRootSignature o-- UserInterface::pRootSignatureTextured
-GraphicsPipelineDesc::pShaderProgram o-- UserInterface::pShaderTextured
-GraphicsPipelineDesc::pVertexLayout o-- UserInterface::mVertexLayoutTextured
-RenderTarget::mWidth o-- UserInterface::mWidth
-RenderTarget::mHeight o-- UserInterface::mHeight
-
-
-
-
-@enduml
+PipelineDesc o-- GraphicsPipelineDesc
+GraphicsPipelineDesc o-- RenderTarget
+GraphicsPipelineDesc o-- BlendStateDesc
+GraphicsPipelineDesc o-- DepthStateDesc
+GraphicsPipelineDesc o-- RasterizerStateDesc
+GraphicsPipelineDesc o-- UserInterface
+PipelineDesc o-- UserInterface
 ```
 
 绘制管道的组成及基本设置如下
 
-```plantuml
-@startuml
+```mermaid
+classDiagram
 class PipelineDesc{
 + mType : PipelineType = PIPELINE_TYPE_GRAPHICS
 + mGraphicsDesc : GraphicsPipelineDesc
 }
 
 class VertexLayout{
-
+    
 }
 
+
 class RasterizerStateDesc{
+    
 }
 
 class DepthStateDesc{
-
+    
 }
 
 class GraphicsPipelineDesc{
@@ -302,10 +243,11 @@ class SwapChain{
 }
 
 class Shader{
-
+    
 }
 
 class RootSignature{
+    
 }
 
 class RenderTarget{
@@ -314,174 +256,125 @@ class RenderTarget{
 + mSampleQuality : unint32_t    
 }
 
-SwapChain::ppRenderTargets o-- RenderTarget
+PipelineDesc o-- GraphicsPipelineDesc
+GraphicsPipelineDesc o-- DepthStateDesc
+GraphicsPipelineDesc o-- VertexLayout
+GraphicsPipelineDesc o-- Shader
+GraphicsPipelineDesc o-- RootSignature
+GraphicsPipelineDesc o-- RasterizerStateDesc
+GraphicsPipelineDesc o-- RenderTarget
+SwapChain o-- RenderTarget
 
-PipelineDesc::mGraphicsDesc o-- GraphicsPipelineDesc 
-GraphicsPipelineDesc::pDepthState o-- DepthStateDesc
-GraphicsPipelineDesc::pColorFormats o-- RenderTarget::mFormat
-GraphicsPipelineDesc::mSampleCount o-- RenderTarget::mSampleCount
-GraphicsPipelineDesc::mSampleQuality o-- RenderTarget::mSampleQuality
-GraphicsPipelineDesc::pVertexLayout o-- VertexLayout
-GraphicsPipelineDesc::pRasterizerState o-- RasterizerStateDesc
-GraphicsPipelineDesc::mDepthStencilFormat o-- RenderTarget::mFormat
-GraphicsPipelineDesc::pRootSignature o-- RootSignature
-GraphicsPipelineDesc::pShaderProgram o-- Shader
 
-@enduml
+
+
+
+
+
 ```
 
 ## Update
 
 主要用于更新输入系统、场景数据
 
-```plantuml
-@startuml
-start
-:updateInputSystem(width, height);
-note right:更新输入系统
-:pCameraController->update();
-note right:更新镜头控制器
-:更新场景|
-end
-@enduml
+```cpp
+void Update()
+{
+    updateInputSystem(width, height); //更新输入系统
+    pCameraController->update(); //更新镜头控制器
+    更新场景();
+}
 ```
 
 ## Draw
 
 Draw接口用于实现绘制每帧的内容
 
-```plantuml
-@startuml
-start
-:acquireNextImage(uint32_t);
-note right:获取下一帧信息
-:getFenceStatus(FenceStatus);
-note right:获取Fence
-if (FenceStatus == FENCE_STATUS_INCOMPLETE) is (yes) then
- :watiForFences;
-endif
-note right:等待GPU完成
-:beginUpdateResource;
-note right:开始更新资源
-:设置数据映射;
-note right:用户自定义
-:endUpdateResource;
-note right:结束更新资源
-:resetCmdPool();
-note right:重置命令池
-:beginCmd();
-note left:从这里开始命令
-note right:开始命令
-:cmdBeginGpuFrameProfile();
-note right:命令-开始Gpu帧的装配
-:cmdResourceBarrier(RenderTargetBarrier)
-note right:命令-设置资源屏障
-:cmdBindRenderTargets(LoadActionDesc)
-note right:命令-绑定渲染对象-读取动作说明
-:cmdSetViewport;
-note right:命令-设置视口
-:cmdSetScissor;
-note right:命令-设置Scissor视角？
+```cpp
+void Draw()
+{
+    acquireNextImage(uint32_t); //获取下一帧信息
+    getFenceStatus(FenceStatus); //获取Fence
+    if (FenceStatus == FENCE_STATUS_INCOMPLETE)
+    {
+        watiForFences(); //等待GPU完成
+    }
+    beginUpdateResource(); //开始更新资源
+    设置数据映射(); //用户自定义
+    endUpdateResource; //结束更新资源
+    resetCmdPool(); //重置命令池
 
-:cmdBeginGpuTimestampQuery;
-note left:从这里开始一个对象的绘制流程
-note right:命令-开始Gpu时间戳查询
-:cmdSetViewport;
-note right:命令-设置视口
-:cmdBindPipeline;
-note right:命令-绑定管道
-:cmdBindDescriptorSet;
-note right:命令-绑定声明集合
-:cmdBindVertexBuffer;
-note right:命令-绑定顶点集合
-:cmdDraw;
-note right:命令-绘制
-:cmdSetViewport
-note right:命令-设置视口
-:cmdEndGpuTimestampQuery;
-note left:绘制对象的流程结束
-note right:命令-结束Gpu时间戳查询
+    //从这里开始命令
+    beginCmd(); //开始命令
+    cmdBeginGpuFrameProfile(); //命令-开始Gpu帧的装配
+    cmdResourceBarrier(RenderTargetBarrier); //命令-设置资源屏障
+    cmdBindRenderTargets(LoadActionDesc); //命令-绑定渲染对象-读取动作说明
+    cmdSetViewport(); //命令-设置视口
+    cmdSetScissor(); //命令-设置Scissor视角？
 
-:endcmd;
-note left:到这里结束命令
-note right:结束命令
+    //从这里开始一个对象的绘制流程
+    cmdBeginGpuTimestampQuery(); //命令-开始Gpu时间戳查询
+    cmdSetViewport(); //命令-设置视口
+    cmdBindPipeline(); //命令-绑定管道
+    cmdBindDescriptorSet(); //命令-绑定声明集合
+    cmdBindVertexBuffer(); //命令-绑定顶点集合
+    cmdDraw(); //命令-绘制
+    cmdSetViewport(); //命令-设置视口
+    cmdEndGpuTimestampQuery(); //命令-结束Gpu时间戳查询
+    //绘制对象的流程结束
 
-:queueSubmit(QueueSubmitDesc);
-note right:队列提交
-:queuePresent(QueuePresentDesc);
-note right:队列发布
+    endcmd(); //结束命令
+    //到这里结束命令
 
-@enduml
+    queueSubmit(QueueSubmitDesc); //队列提交
+    queuePresent(QueuePresentDesc); //队列发布
+}
 ```
 
 ## Unload
 
 释放管道、交换链、渲染对象
 
-```plantuml
-@startuml
-start
-:waitQueueIdle();
-note right:等待队列闲置
-:removeUserInterfacePipelines();
-note right:移除用户交互管道
-:removeFontSystemPipelines();
-note right:移除字体系统管道
-:removePipeline();
-note right:移除指定管道
-:removeSwapChain();
-note right:移除交换链
-:removeRenderTarget();
-note right:移除渲染对象
-
-end
-@enduml
+```cpp
+void Unload()
+{
+    waitQueueIdle(); //等待队列闲置
+    removeUserInterfacePipelines(); //移除用户交互管道
+    removeFontSystemPipelines(); //移除字体系统管道
+    removePipeline(); //移除指定管道
+    removeSwapChain(); //移除交换链
+    removeRenderTarget(); //移除渲染对象
+}
 ```
 
 ## Exit
 
 卸载资源、卸载文件系统、输入系统、交互系统
 
-```plantuml
-@startuml
-start
-:exitInputSytem();
-note right:退出输入系统
-:exitCameraController();
-note right:退出摄像机控制器
-:exitUserInterface();
-note right:退出用户交互
-:exitFontSystem();
-note right:退出字体系统
-:removeResource();
-note right:移除资源
-:removeDescriptorSet();
-note right:移除Descriptor
-:removeSampler()
-note right:移除采样器
-:removeShader()
-note right:移除着色器
-:removeRootSignature()
-note right:移除根信签名
-:removeFence()
-note right:移除Fence
-:removeSemaphore();
-note right:移除信标
-:removeCmd();
-note right:移除命令
-:exitResourceLoadrInterface();
-note right:移除资源读取接口
-:exitRender();
-note right:移除渲染器
-
-end
-@enduml
+```cpp
+void Exit()
+{
+    exitInputSytem(); //退出输入系统
+    exitCameraController(); //退出摄像机控制器
+    exitUserInterface(); //退出用户交互
+    exitFontSystem(); //退出字体系统
+    removeResource(); //移除资源
+    removeDescriptorSet(); //移除Descriptor
+    removeSampler(); //移除采样器
+    removeShader(); //移除着色器
+    removeRootSignature(); //移除根信签名
+    removeFence(); //移除Fence
+    removeSemaphore(); //移除信标
+    removeCmd(); //移除命令
+    exitResourceLoadrInterface(); //移除资源读取接口
+    exitRender(); //移除渲染器
+}
 ```
 
 # 基本定义
 
 1. AABB (Axis-Aligned Bounding Box)，轴对称齐包围盒。
-
+   
    ![Screenshot 2022-03-23 170738.png](D:\GitHub\xiaohunqupo.github.io\_posts\2022-03-21-the-forge-learn\Screenshot%202022-03-23%20170738.png)
 
 2. Cull，剔除
