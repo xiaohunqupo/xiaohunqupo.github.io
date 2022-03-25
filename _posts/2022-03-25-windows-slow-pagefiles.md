@@ -1,8 +1,6 @@
 ---
 title: pagefiles.sys所在盘缓慢导致系统卡顿
-
 tags: Windows, pagefiles.sys
-
 ---
 
 # pagefiles.sys所在盘缓慢导致系统卡顿
@@ -17,13 +15,13 @@ tags: Windows, pagefiles.sys
 
 ## 虚拟内存设置
 
-![Untitled]($(filename)_assets/eeccdb64f3a8d270eede22cb505a59d0be7e84c9.png)
+![Untitled](.\2022-03-25-windows-slow-pagefiles\1.png)
 
-![Untitled]($(filename)_assets/9425c225b2e20be9093857b80ccd5dfca5db7b38.png)
+![Untitled](.\2022-03-25-windows-slow-pagefiles\2.png)
 
-![Untitled]($(filename)_assets/0c3dc236058c3b0b04fd632be0d1000dadda1388.png)
+![Untitled](.\2022-03-25-windows-slow-pagefiles\3.png)
 
-![Untitled]($(filename)_assets/e8b1f345000a154d5fd4fc706469b5f60cb3c7e8.png)
+![Untitled](.\2022-03-25-windows-slow-pagefiles\4.png)
 
 ## 磁盘队列长度
 
