@@ -148,7 +148,7 @@ class PipelineDesc{
 }
 
 class RasterizerStateDesc{
-    
+
 }
 
 class RenderTarget{
@@ -214,16 +214,16 @@ class PipelineDesc{
 }
 
 class VertexLayout{
-    
+
 }
 
 
 class RasterizerStateDesc{
-    
+
 }
 
 class DepthStateDesc{
-    
+
 }
 
 class GraphicsPipelineDesc{
@@ -243,11 +243,11 @@ class SwapChain{
 }
 
 class Shader{
-    
+
 }
 
 class RootSignature{
-    
+
 }
 
 class RenderTarget{
@@ -264,13 +264,6 @@ GraphicsPipelineDesc o-- RootSignature
 GraphicsPipelineDesc o-- RasterizerStateDesc
 GraphicsPipelineDesc o-- RenderTarget
 SwapChain o-- RenderTarget
-
-
-
-
-
-
-
 ```
 
 ## Update
@@ -371,28 +364,4 @@ void Exit()
 }
 ```
 
-# 基本定义
-
-1. AABB (Axis-Aligned Bounding Box)，轴对称齐包围盒。
-   
-   ![Screenshot 2022-03-23 170738.png](.\2022-03-21-the-forge-learn\Screenshot%202022-03-23%20170738.png)
-
-2. Cull，剔除
-
-3. Blend，混合
-
-4. Conservative，保守？
-
-5. Stencil，模具
-
-6. Fence，是什么呢？
-
-7. cmdPool，命令池。通常cpu向其添加命令，Gpu从其获取命令，这是Cpu和Gpu同步的一种手段
-
-8. Resource Barrir 资源屏障。通知图形驱动程序驱动程序可能需要同步对存储资源的内存的多次访问的情况。
-
-9. Scissor
-
-# 基本类
-
-## FenceStatus
+# 
