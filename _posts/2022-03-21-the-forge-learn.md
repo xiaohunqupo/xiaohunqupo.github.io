@@ -375,7 +375,7 @@ void Exit()
 
 1. AABB (Axis-Aligned Bounding Box)，轴对称齐包围盒。
    
-   ![Screenshot 2022-03-23 170738.png](D:\GitHub\xiaohunqupo.github.io\_posts\2022-03-21-the-forge-learn\Screenshot%202022-03-23%20170738.png)
+   ![Screenshot 2022-03-23 170738.png](.\2022-03-21-the-forge-learn\Screenshot%202022-03-23%20170738.png)
 
 2. Cull，剔除
 
