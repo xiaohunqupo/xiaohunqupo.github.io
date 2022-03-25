@@ -1,5 +1,4 @@
 ---
-
 title: pagefiles.sys所在盘缓慢导致系统卡顿
 
 tags: Windows, pagefiles.sys
@@ -16,7 +15,7 @@ tags: Windows, pagefiles.sys
 
 如果发现在非系统盘有繁重工作时，出现系统卡顿，那通常是由于`pagefiles.sys`文件在那个盘导致的。可以通过修改`虚拟内存` 设置，解决卡顿问题。
 
-# 虚拟内存设置
+## 虚拟内存设置
 
 ![Untitled]($(filename)_assets/eeccdb64f3a8d270eede22cb505a59d0be7e84c9.png)
 
@@ -26,7 +25,7 @@ tags: Windows, pagefiles.sys
 
 ![Untitled]($(filename)_assets/e8b1f345000a154d5fd4fc706469b5f60cb3c7e8.png)
 
-# 磁盘队列长度
+## 磁盘队列长度
 
 磁盘队列长度是指磁盘读写任务的工作状况，长度可参考下表：
 
