@@ -9,7 +9,7 @@ tags: Engine
 
 1. AABB (Axis-Aligned Bounding Box)，轴对称齐包围盒。
    
-   ![1.png](.\2022-03-25-engine-develop-terms\1.png)
+   ![1.png](_posts\2022-03-25-engine-develop-terms\1.png)
 
 2. BVH (Bounding Volume Hierarchy)，层次包围盒
 
