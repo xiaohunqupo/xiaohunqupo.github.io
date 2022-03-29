@@ -28,3 +28,4 @@ tags: Engine
 9. Resource Barrir 资源屏障。通知图形驱动程序驱动程序可能需要同步对存储资源的内存的多次访问的情况。
 
 10. Scissor
+![1.png](\assets\favicon-16x16.png)
