@@ -200,6 +200,8 @@ exclude:
   - /screenshots
   - /test
   - /vendor
+  - /images
+  - /_post
 
 defaults:
   - scope:
