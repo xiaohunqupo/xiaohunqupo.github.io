@@ -201,7 +201,7 @@ exclude:
   - /test
   - /vendor
   - /images
-  - /_post
+  - /_posts
 
 defaults:
   - scope:
