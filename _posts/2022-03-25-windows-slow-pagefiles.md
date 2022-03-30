@@ -15,13 +15,13 @@ tags: Windows, pagefiles.sys
 
 ## 虚拟内存设置
 
-![Untitled](.\2022-03-25-windows-slow-pagefiles\1.png)
+![Untitled](\images\2022-03-25-windows-slow-pagefiles\1.png)
 
-![Untitled](.\2022-03-25-windows-slow-pagefiles\2.png)
+![Untitled](\images\2022-03-25-windows-slow-pagefiles\2.png)
 
-![Untitled](.\2022-03-25-windows-slow-pagefiles\3.png)
+![Untitled](\images\2022-03-25-windows-slow-pagefiles\3.png)
 
-![Untitled](.\2022-03-25-windows-slow-pagefiles\4.png)
+![Untitled](\images\2022-03-25-windows-slow-pagefiles\4.png)
 
 ## 磁盘队列长度
 
