@@ -1,6 +1,6 @@
 ---
 title: pagefiles.sys所在盘缓慢导致系统卡顿
-tags: Windows, pagefiles.sys
+tags: Windows pagefiles.sys
 ---
 
 # pagefiles.sys所在盘缓慢导致系统卡顿
