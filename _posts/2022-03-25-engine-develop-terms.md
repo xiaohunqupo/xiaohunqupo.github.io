@@ -3,9 +3,7 @@ title: 引擎开发术语
 tags: Engine
 ---
 
-# 引擎开发术语
-
-## 基础术语
+# 基础术语
 
 1. AABB (Axis-Aligned Bounding Box)，轴对称齐包围盒。
    
