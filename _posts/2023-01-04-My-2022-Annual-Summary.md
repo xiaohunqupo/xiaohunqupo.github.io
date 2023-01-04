@@ -13,6 +13,7 @@ article_header:
     gradient: 'linear-gradient(135deg, rgba(34, 139, 87 , .4), rgba(139, 34, 139, .4))'
     src: /docs/assets/images/cover3.jpg
 ---
+2022 不好不坏
 
 # 总结
 2022年有很多想做的事情没有做，不仅仅是因为疫情和工作，也有一些其他的原因。
