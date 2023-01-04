@@ -1,6 +1,6 @@
 ---
 layout: article
-title: 我的2002年年度总结
+title: 我的2022年年度总结
 tags: 2022,Summary
 header:
   theme: dark
