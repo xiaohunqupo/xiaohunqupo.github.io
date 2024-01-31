@@ -1,0 +1,77 @@
+---
+title: QT 和 MFC 兼容问题
+
+tags: C/C++, QT, MFC
+
+---
+# 起因
+在QT环境下，因为MFC环境未进行默认初始化，所以会导致MFC对话框会因为资源切换问题导致无法正确初始化。
+
+# 问题原因及思路
+整个环境中，至少保证一个DLL中使用从CWinApp派生自定义实力的方式实现DLL。
+
+## 派生类实现
+派生方法如下：
+```c++
+class __declspec(dllexport) Z_MyApp : public CWinApp
+{
+public:
+    Z_UserInterfaceApp();
+public:
+    virtual BOOL InitInstance();
+    DECLARE_MESSAGE_MAP()
+};
+			  
+BEGIN_MESSAGE_MAP(Z_MyApp, CWinApp)
+END_MESSAGE_MAP()
+			  
+// CZWSTLoaderApp 初始化
+Z_MyApp::Z_MyApp()
+{
+}
+			  
+Z_MyApp theApp;
+			  
+BOOL Z_MyApp::InitInstance()
+{
+    CWinApp::InitInstance();
+    return TRUE;
+}
+```
+## dll通常定义
+如果所有包含MFC的DLL均使用简易的dllmain实现DLL，将导致MFC始终无法正确初始化。
+```c++
+BOOL APIENTRY DllMain(HMODULE hModule,
+    DWORD  ul_reason_for_call,
+    LPVOID lpReserved
+)
+{
+    switch (ul_reason_for_call)
+	{
+	case DLL_PROCESS_ATTACH:
+	{
+	    break;
+	}
+	case DLL_THREAD_ATTACH:
+	{
+	    break;
+    }
+	case DLL_THREAD_DETACH:
+	{
+	    break;
+    }
+    case DLL_PROCESS_DETACH:
+    {
+        break;
+    }
+    }
+    return TRUE;
+}
+```
+## 资源切换
+在创建对话框之前，进行资源切换。
+通常在MFC应用程序中切换MFC资源使用函数`AfxSetResourceHandle`即可。
+但是在QT应用程序中，还必须在`AfxSetResourceHandle`函数前，使用函数`AfxWinInit`重新初始化MFC。
+
+#实现
+//待完成
