@@ -1,7 +1,7 @@
 ---
 title: Azure DevOps 生成管道每次运行都会清理并重新获取所有代码
 
-tags: C/C++
+tags: Azure DevOps/TFS
 
 ---
 
