@@ -8,7 +8,7 @@ tags: TFS
 # 前言
 在添加TFS备份任务时，我遇到了如下几个问题：
 
-1. TF401009:Azure DevOps 服务账户 NT AUTHORITY\LOCAL SERVICE 无法访问网络共享。请更改魏可访问备份路径的账户。
+1. TF401009:Azure DevOps 服务账户 NT AUTHORITY\LOCAL SERVICE 无法访问网络共享。请更改为可访问备份路径的账户。
 2. SQL实例“XXXXX”上的数据库“XXXXXX”正在使用简单恢复模式，该模式不能用于拆功能键所有 Azure DevOps 数据库的事务一致性备份。所有Azure DevOps 数据库都必须使用完整恢复模式来创建备份计划。
 3. TF401002: SQL Server 数据库引擎未能将数据库备份保存到路径 \\xxxxx\source_backup。  请向 SQL 服务帐户授予对该文件夹的读/写访问权限。
 
